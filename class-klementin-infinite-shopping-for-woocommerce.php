@@ -21,7 +21,10 @@ class Klementin_infinite_shopping_for_woocommerce {
 		add_action( 'wp', array( self::class, 'record_refer_address' ) );
 		add_action( 'wp_footer', array( self::class, 'get_refer_cookie' ) );
 		add_filter( 'woocommerce_continue_shopping_redirect', array( self::class, 'do_continue_shopping_link' ) );
-		add_filter( 'klementin_infinite_shopping_for_woocommerce_redirect', array( self::class, 'do_continue_shopping_link' ) );
+		add_filter( 'klementin_infinite_shopping_for_woocommerce_redirect', array(
+			self::class,
+			'do_continue_shopping_link'
+		) );
 		add_action( 'admin_enqueue_scripts', function () {
 			wp_register_script( 'klementin-infinite-shopping-for-woocommerce.js', plugin_dir_url( __FILE__ ) . 'assets/script.js', array(), false, true );
 			wp_enqueue_script( 'klementin-infinite-shopping-for-woocommerce.js' );
@@ -75,17 +78,25 @@ class Klementin_infinite_shopping_for_woocommerce {
 
 		$option = get_option( 'klementin-infinite-shopping-for-woocommerce', array() );
 		$data   = array_filter( array_map( function ( $item ) {
-			return sanitize_text_field($item);
+			return sanitize_text_field( $item );
 		}, $_REQUEST['excludes'] ) );
 		update_option( 'klementin-infinite-shopping-for-woocommerce', $data );
 
-		echo self::get_exclude_table( 'exclude-table', sanitize_text_field($_REQUEST['add_empty_field']) );
+		echo self::get_exclude_table( 'exclude-table', sanitize_text_field( $_REQUEST['add_empty_field'] ) );
 
 		die;
 	}
 
 	private static function get_exclude_routes() {
-		return array_merge( self::$exclude_routes, get_option( 'klementin-infinite-shopping-for-woocommerce' ) );
+		$woocommerce_specific = array( wc_get_cart_url(), wc_get_checkout_url() );
+
+		$product = wc_get_product();
+
+		if ( ! empty( $product ) ) {
+			$woocommerce_specific[] = $product->get_permalink();
+		}
+
+		return array_merge( self::$exclude_routes, get_option( 'klementin-infinite-shopping-for-woocommerce' ), $woocommerce_specific );
 	}
 
 	public static function do_continue_shopping_link() {
@@ -103,7 +114,7 @@ class Klementin_infinite_shopping_for_woocommerce {
 	}
 
 	public static function get_refer_cookie() {
-		return esc_url($_COOKIE['klementin_infinite_shopping_for_woocommerce_refer']);
+		return esc_url( $_COOKIE['klementin_infinite_shopping_for_woocommerce_refer'] );
 	}
 
 	/**
@@ -128,12 +139,12 @@ class Klementin_infinite_shopping_for_woocommerce {
 			}
 		}
 
-		return ! is_admin() && ! $is_excluded_route && ! is_cart() && ! is_checkout();
+		return ! is_admin() && ! $is_excluded_route && ! is_cart() && ! is_checkout() && ! is_product();
 	}
 
 	public static function record_refer_address() {
 		if ( self::can_set_refer() ) {
-			setcookie( 'klementin_infinite_shopping_for_woocommerce_refer', esc_url($_SERVER['HTTP_REFERER']), time() + 86000, "/", '', false, true );
+			setcookie( 'klementin_infinite_shopping_for_woocommerce_refer', esc_url( $_SERVER['HTTP_REFERER'] ), time() + 86000, "/", '', false, true );
 		}
 	}
 

@@ -8,20 +8,23 @@
     "packages": [
         {
             "name": "klementinweb/klementin-wp",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PatrickSH/klementin-wp.git",
-                "reference": "060089565b49aabf0df2273a0f9f6dc06ccc2782"
+                "reference": "18716ede354fcd2c75d4c023d445aa8fa6a79b92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PatrickSH/klementin-wp/zipball/060089565b49aabf0df2273a0f9f6dc06ccc2782",
-                "reference": "060089565b49aabf0df2273a0f9f6dc06ccc2782",
+                "url": "https://api.github.com/repos/PatrickSH/klementin-wp/zipball/18716ede354fcd2c75d4c023d445aa8fa6a79b92",
+                "reference": "18716ede354fcd2c75d4c023d445aa8fa6a79b92",
                 "shasum": ""
             },
             "type": "library",
             "autoload": {
+                "files": [
+                    "src/init.php"
+                ],
                 "classmap": [
                     "src"
                 ]
@@ -36,9 +39,9 @@
             "description": "Make WordPress developmemnt easier",
             "support": {
                 "issues": "https://github.com/PatrickSH/klementin-wp/issues",
-                "source": "https://github.com/PatrickSH/klementin-wp/tree/1.1.1"
+                "source": "https://github.com/PatrickSH/klementin-wp/tree/1.1.2"
             },
-            "time": "2022-03-16T08:36:47+00:00"
+            "time": "2022-03-16T09:10:19+00:00"
         }
     ],
     "packages-dev": [],
